@@ -20,14 +20,14 @@ with app.app_context():
 @app.get('/')
 def index():
     if session.get('user'):
-        return redirect('/secret')
+        return redirect('/users/' + session.get('user'))
     return redirect('/register')
 
 
 @app.get('/register')
 def displayRegister():
     if session.get('user'):
-        return redirect('/secret')
+        return redirect('/users/' + session.get('user'))
     form = UserForm()
     return render_template('register.html', form=form)
 
@@ -36,7 +36,7 @@ def displayRegister():
 def processRegister():
     form = UserForm(request.form)
     if form.validate():
-        user: User = User(
+        user = User.register(
             username=form.username.data,
             password=form.password.data,
             email=form.email.data,
@@ -48,7 +48,7 @@ def processRegister():
         db.session.commit()
 
         session['user'] = user.username
-        return redirect('/secret')
+        return redirect('/users/' + user.username)
     else:
         return render_template('register.html', form=form)
 
@@ -56,7 +56,7 @@ def processRegister():
 @app.get('/login')
 def displayLogin():
     if session.get('user'):
-        return redirect('/secret')
+        return redirect('/users/' + session.get('user'))
     form = LoginForm()
     return render_template('login.html', form=form)
 
@@ -73,18 +73,20 @@ def processLogin():
 
         if (attemptedUser):
             session['user'] = attemptedUser.username
-            return redirect('/secret')
+            return redirect('/users/' + attemptedUser.username)
         else:
             return render_template('login.html', form=form, errors=['Credentials invalid. Please try again.'])
     else:
         return render_template('login.html', form=form)
 
 
-@app.get('/secret')
-def displaySecret():
+@app.get('/users/<username>')
+def displayUser(username: str):
     if not session.get('user'):
         return redirect('/register')
-    return render_template('secret.html')
+
+    user: User = User.query.filter_by(username=username).first()
+    return render_template('user.html', user=user)
 
 
 @app.get('/logout')

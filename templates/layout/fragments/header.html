@@ -12,8 +12,8 @@
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
                 </li>
                 {% if 'user' in session %}
-                <li><a href="/secret">Secret</a></li>
-                <li><a href="/logout">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href={{'/users/' + session['user']}}>Secret</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">Link</a>
