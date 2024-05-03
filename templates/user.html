@@ -7,4 +7,28 @@
 <p>First name: {{user.first_name}}</p>
 <p>Last name: {{user.last_name}}</p>
 
+<h2>Feedback</h2>
+{% if user.feedback %}
+<ul>
+    {% for point in user.feedback %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{point.title}}</h5>
+            <p class="card-text">{{point.content}}</p>
+            <p class="card-text">{{point.username}}</p>
+            <div class="d-flex w-50 mx-auto justify-content-between">
+                <a class="btn btn-secondary" href={{'/feedback/' + point.id | string + '/update' }}>Edit</a>
+                <form action={{'/feedback/' + point.id | string + '/delete' }} method="post">
+                    <input type="submit" class="btn btn-danger" value="Delete" />
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No feedback.</p>
+{% endif %}
+<a class="btn btn-success" href={{'/users/' + user.username + '/feedback/add' }}>Add Feedback</a>
+
 {% endblock %}

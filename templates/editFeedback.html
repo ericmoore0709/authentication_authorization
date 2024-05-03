@@ -1,0 +1,22 @@
+{% extends 'layout/base.html'%}
+{% block content %}
+
+<h1>Edit Feedback</h1>
+
+<form class="p-2 py-5 bg-light w-25 mx-auto border border-dark rounded" action={{'/feedback/' + id | string + '/update'
+    }} method="post">
+    {% for field in form
+    if field.widget.input_type != 'hidden' %}
+    <p>
+        <span class="col-form-label">{{field.label}}</span>
+        <span class="col-form-control">{{field}}</span>
+        {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </p>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+{% endblock %}

@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, PasswordField
+from wtforms import Form, HiddenField, StringField, PasswordField
 from wtforms.validators import Length, Email
 
 
@@ -13,3 +13,8 @@ class UserForm(Form):
 class LoginForm(Form):
     username = StringField('Username', [Length(min=5, max=20)])
     password = PasswordField('Password', [Length(min=8)])
+
+
+class FeedbackForm(Form):
+    title = StringField('Title', [Length(max=100)])
+    content = StringField('Content')
